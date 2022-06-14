@@ -19,12 +19,16 @@ import operator
 import os
 import shutil
 import sys
+import warnings
 
 import numpy as np
 
-MINOVERLAP = 0.5  # default value (defined in the PASCAL VOC2012 challenge)
+warnings.simplefilter(action='ignore', category=DeprecationWarning)
 
 parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--iou', help="Path to ground truth folder", type=float, default=0.5
+)
 parser.add_argument('--gt-path', help="Path to ground truth folder", type=str)
 parser.add_argument('--dr-path', help="Path to detection results folder", type=str)
 parser.add_argument(
@@ -55,6 +59,8 @@ if args.set_class_iou is not None:
 
 # make sure that the cwd() is the location of the python script (so that every path makes sense)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+MINOVERLAP = args.iou
 
 GT_PATH = args.gt_path
 DR_PATH = args.dr_path
